@@ -21,6 +21,4 @@ if["$DIFF" != ""]
 	then
 	echo "There are some differences"
 	/var/opt/ec2-sns-sender/sns_send -t arn:aws:sns:us-east-1:344420214229:unb_lib_git_pushes -s '[Relentless][etc Files][PUSH]' -m "$DIFF" --subject "DIFF Files have changed"
-else
-	sudo cp -R $tmp_to_check /$files-to-check
 fi
