@@ -1,4 +1,4 @@
 relentless-repo-diff-check
 ==========================
-Usage: repo-diff-check /tmp/relentless-etc-compare-files/etc /var/opt/repos/relentless-etc-files
+Usage: repo-diff-check TMP-DIR DIR-TO-CLONE-FROM DIR-TO-MATCH-AGAINST
 
