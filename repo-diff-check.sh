@@ -1,7 +1,4 @@
 #!/bin/sh
-# repo-diff-check /tmp/relentless-etc-compare-files/etc /var/opt/repos/relentless-etc-files
-#tmp_to_check= "/tmp/relentless-etc-compare-files/etc"
-#file-from-etc ="/var/opt/repos/relentless-etc-files"
 tmp_to_check=$1
 files-from-etc=$2
 files-to-check=$3
