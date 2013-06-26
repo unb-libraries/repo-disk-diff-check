@@ -3,15 +3,19 @@ temp_checkout_path="/tmp/$$"
 repository_path=$1
 deploy_path=$2
 
-rm -rf /tmp/$temp_checkout_path
-mkdir /tmp/$temp_checkout_path
-
+rm -rf $temp_checkout_path
+mkdir $temp_checkout_path
 git clone --recursive $repository_path $temp_checkout_path
 
-for f in $temp_checkout_path
-	for g in $deploy_path
-do
-	DIFF=$DIFF$(diff f g)
+temp_checkout_files=$(find $temp_checkout_path -type f | grep -v '\/\.git\/')
+for checked_out_file in $temp_checkout_files; do
+        deployed_file=$(echo $checked_out_file | sed -e 's|'$temp_checkout_path'|'$deploy_path'|g')
+        deployed_diff=$(diff $checked_out_file $deployed_file | sed -e 's/^\s*//g' -e 's/(\s|\n)*$//g' )
+        if [ "$deployed_diff" ]
+        then
+                relative_filepath=$(echo $checked_out_file | sed -e 's|'$temp_checkout_path'/||g')
+                output_block="$output_block\n$relative_filepath\n$deployed_diff"
+        fi
 done
 
 if["$DIFF" != ""]
