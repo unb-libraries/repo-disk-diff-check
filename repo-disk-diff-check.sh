@@ -2,9 +2,6 @@
 temp_checkout_path="/tmp/$$"
 repository_path=$1
 deploy_path=$2
-sns_topic_id=$3
-server_id=$4
-short_message=$5
 
 rm -rf $temp_checkout_path
 mkdir $temp_checkout_path
@@ -18,21 +15,14 @@ for checked_out_file in $temp_checkout_files; do
         then
                 relative_filepath=$(echo $checked_out_file | sed -e 's|'$temp_checkout_path'/||g')
                 output_block="$output_block
-$4 : $1
 $relative_filepath
 $deployed_diff
+
 "
         fi
 done
 
+
 rm -rf $temp_checkout_path
 
-if [ "$output_block" ]
-then
-	if [ "$short_message" ]
-	then
-	/var/opt/ec2-sns-sender/sns_send -t $3 -s "Uncommitted Changes in $1 on $4" -m "WARNING : Uncommitted Changes in $1 on $4"
-	else
-	/var/opt/ec2-sns-sender/sns_send -t $3 -s "Uncommitted Changes in $1 on $4" -m "$output_block"
-	fi
-fi
+echo $output_block
