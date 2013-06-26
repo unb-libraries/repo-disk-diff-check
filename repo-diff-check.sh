@@ -22,7 +22,7 @@ done
 
 rm -rf $temp_checkout_path
 
-if[ "$output_block" ]
+if [ "$output_block" ]
 then
 	/var/opt/ec2-sns-sender/sns_send -t $3 -s 'Uncommitted Files on $4' -m "$output_block"
 fi
