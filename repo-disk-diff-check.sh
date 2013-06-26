@@ -31,7 +31,7 @@ if [ "$output_block" ]
 then
 	if [ "$short_message" ]
 	then
-	/var/opt/ec2-sns-sender/sns_send -t $3 -s "Uncommitted Changes in $1 on $4" -m "Uncommitted Changes in $1 on $4"
+	/var/opt/ec2-sns-sender/sns_send -t $3 -s "Uncommitted Changes in $1 on $4" -m "WARNING : Uncommitted Changes in $1 on $4"
 	else
 	/var/opt/ec2-sns-sender/sns_send -t $3 -s "Uncommitted Changes in $1 on $4" -m "$output_block"
 	fi
