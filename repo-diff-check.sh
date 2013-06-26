@@ -1,7 +1,7 @@
 #!/bin/sh
-temp_checkout_path=$1
-repository_path=$2
-deploy_path=$3
+temp_checkout_path="/tmp/$$"
+repository_path=$1
+deploy_path=$2
 
 rm -rf /tmp/$temp_checkout_path
 mkdir /tmp/$temp_checkout_path
