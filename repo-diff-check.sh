@@ -1,15 +1,15 @@
 #!/bin/sh
-tmp_to_check=$1
-files-from-etc=$2
-files-to-check=$3
+temp_checkout_path=$1
+repository_path=$2
+deploy_path=$3
 
-rm -rf /tmp/$tmp_to_check
-mkdir /tmp/$tmp_to_check
+rm -rf /tmp/$temp_checkout_path
+mkdir /tmp/$temp_checkout_path
 
-git clone --recursive $files-from-etc $tmp_to_check
+git clone --recursive $repository_path $temp_checkout_path
 
-for f in $tmp_to_check
-	for g in $files-to-check
+for f in $temp_checkout_path
+	for g in $deploy_path
 do
 	DIFF=$DIFF$(diff f g)
 done
