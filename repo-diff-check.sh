@@ -2,9 +2,9 @@
 # repo-diff-check /tmp/relentless-etc-compare-files/etc /var/opt/repos/relentless-etc-files
 #tmp_to_check= "/tmp/relentless-etc-compare-files/etc"
 #file-from-etc ="/var/opt/repos/relentless-etc-files"
-tmp_to_check = $1
-files-from-etc = $2
-files-to-check = $3
+tmp_to_check=$1
+files-from-etc=$2
+files-to-check=$3
 
 rm -rf /tmp/$tmp_to_check
 mkdir /tmp/$tmp_to_check
@@ -14,7 +14,7 @@ git clone --recursive $files-from-etc $tmp_to_check
 for f in $tmp_to_check
 	for g in $files-to-check
 do
-	DIFF = $DIFF$(diff f g)
+	DIFF=$DIFF$(diff f g)
 done
 
 if["$DIFF" != ""]
