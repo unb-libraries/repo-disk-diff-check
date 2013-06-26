@@ -16,7 +16,11 @@ for checked_out_file in $temp_checkout_files; do
         if [ "$deployed_diff" ]
         then
                 relative_filepath=$(echo $checked_out_file | sed -e 's|'$temp_checkout_path'/||g')
-                output_block="$output_block\n$relative_filepath\n$deployed_diff"
+                output_block="$output_block
+Changes in $1 on $4
+$relative_filepath
+$deployed_diff
+"
         fi
 done
 
@@ -24,5 +28,5 @@ rm -rf $temp_checkout_path
 
 if [ "$output_block" ]
 then
-	/var/opt/ec2-sns-sender/sns_send -t $3 -s 'Uncommitted Files on $4' -m "$output_block"
+	/var/opt/ec2-sns-sender/sns_send -t $3 -s "Uncommitted Changes in $1 on $4" -m "$output_block"
 fi
