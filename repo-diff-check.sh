@@ -18,6 +18,8 @@ for checked_out_file in $temp_checkout_files; do
         fi
 done
 
+rm -rf $temp_checkout_path
+
 if["$DIFF" != ""]
 	then
 	echo "There are some differences"
