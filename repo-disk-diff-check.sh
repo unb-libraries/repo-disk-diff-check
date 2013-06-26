@@ -15,14 +15,16 @@ for checked_out_file in $temp_checkout_files; do
         then
                 relative_filepath=$(echo $checked_out_file | sed -e 's|'$temp_checkout_path'/||g')
                 output_block="$output_block
-$relative_filepath
+$relative_filepath:
 $deployed_diff
 
 "
         fi
 done
 
-
 rm -rf $temp_checkout_path
 
-echo $output_block
+if [ "$output_block" ]
+then
+    printf "%s" "$output_block"
+fi
