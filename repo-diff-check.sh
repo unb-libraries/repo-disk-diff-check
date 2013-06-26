@@ -2,6 +2,8 @@
 temp_checkout_path="/tmp/$$"
 repository_path=$1
 deploy_path=$2
+sns_topic_id=$3
+server_id=$4
 
 rm -rf $temp_checkout_path
 mkdir $temp_checkout_path
@@ -22,5 +24,5 @@ rm -rf $temp_checkout_path
 
 if[ "$output_block" ]
 then
-	/var/opt/ec2-sns-sender/sns_send -t arn:aws:sns:us-east-1:344420214229:unb_lib_git_pushes -s '[Relentless][etc Files][PUSH]' -m "$DIFF" --subject "DIFF Files have changed"
+	/var/opt/ec2-sns-sender/sns_send -t $3 -s 'Uncommitted Files on $4' -m "$output_block"
 fi
