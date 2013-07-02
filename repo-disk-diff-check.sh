@@ -5,7 +5,7 @@ deploy_path=$2
 
 rm -rf $temp_checkout_path
 mkdir $temp_checkout_path
-git clone --quiet --recursive $repository_path $temp_checkout_path
+git clone --quiet --recursive $repository_path $temp_checkout_path > /dev/null
 
 temp_checkout_files=$(find $temp_checkout_path -type f | grep -v '\/\.git\/')
 for checked_out_file in $temp_checkout_files; do
