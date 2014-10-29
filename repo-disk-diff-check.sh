@@ -3,8 +3,8 @@ temp_checkout_path="/tmp/$$"
 repository_path=$1
 deploy_path=$2
 
-rm -rf "$temp_checkout_path""
-mkdir "$temp_checkout_path""
+rm -rf "$temp_checkout_path"
+mkdir "$temp_checkout_path"
 git clone --quiet --recursive "$repository_path" "$temp_checkout_path" > /dev/null
 
 temp_checkout_files=$(find "$temp_checkout_path" -type f | grep -v '\/\.git\/')
@@ -22,7 +22,7 @@ $deployed_diff
         fi
 done
 
-rm -rf "$temp_checkout_path""
+rm -rf "$temp_checkout_path"
 
 if [ "$output_block" ]
 then
