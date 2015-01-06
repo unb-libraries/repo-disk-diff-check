@@ -16,7 +16,10 @@ def send_sns(topic_id, subject, message):
 
 for repo in repos.repos_to_check:
     tempdir = tempfile.mkdtemp()
-    subprocess.call([ 'git', 'clone', '--quiet', '--recursive', repo['repo-path'], tempdir ])
+    if 'branch' in repo:
+      subprocess.call([ 'git', 'clone', '--quiet', '--recursive', '-b', repo['branch'], repo['repo-path'], tempdir ])
+    else:
+      subprocess.call([ 'git', 'clone', '--quiet', '--recursive', repo['repo-path'], tempdir ])
     diff_output = subprocess.check_output([ 'git', '--git-dir=' + tempdir + '/.git', '--work-tree=' + repo['deploy-path'], 'diff' ])
     shutil.rmtree(tempdir)
 
