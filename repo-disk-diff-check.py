@@ -25,5 +25,5 @@ for repo in repos.repos_to_check:
 
     if diff_output:
         subject = 'WARNING : Uncommitted Changes in ' + repo['repo-path'] + ' on ' + hostname
-        send_sns('arn:aws:sns:us-east-1:344420214229:repo_out_of_sync', subject, diff_output)
-        send_sns('arn:aws:sns:us-east-1:344420214229:unb_lib_developers', subject, subject)
+        send_sns('arn:aws:sns:us-east-1:344420214229:unb_lib_repo_out_of_sync_full', subject, diff_output)
+        send_sns('arn:aws:sns:us-east-1:344420214229:unb_lib_repo_out_of_sync_summary', subject, subject)
