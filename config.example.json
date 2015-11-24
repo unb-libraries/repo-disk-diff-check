@@ -1,0 +1,10 @@
+{
+  "sns-topic-summary": "foo",
+  "sns-topic-full": "foo",
+  "servers": {
+    "example.com": [
+      { "repo": "/path/to/repo", "deploy": "/path/to/deployment" },
+      { "repo": "/path/to/another/repo", "deploy": "/path/to/another/deployment", "branch": "branch-name" }
+    ]
+  }
+}

@@ -1,6 +1,0 @@
-repos_to_check = [
-  {
-   'repo-path' : '/var/opt/repos/my-repo',
-   'deploy-path' : '/my/deploy/path'
-   }
-]

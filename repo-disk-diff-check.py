@@ -1,29 +1,34 @@
 #!/usr/bin/env python
 
-import subprocess
-import os
-import socket
-import tempfile
-import shutil
-import repos as repos
+import json, os, subprocess
+from optparse import OptionParser
 
 ec2_sns_sender_binpath = '/var/opt/ec2-sns-sender/sns_send'
-hostname = socket.gethostname()
 
 def send_sns(topic_id, subject, message):
-    DEVNULL = open(os.devnull, 'w')
-    subprocess.call([ ec2_sns_sender_binpath, '-t', topic_id, '-s', subject, '-m', message ], stdout=DEVNULL, stderr=DEVNULL)
+  DEVNULL = open(os.devnull, 'w')
+  subprocess.call([ ec2_sns_sender_binpath, '-t', topic_id, '-s', subject, '-m', message ], stdout=DEVNULL, stderr=DEVNULL)
 
-for repo in repos.repos_to_check:
-    tempdir = tempfile.mkdtemp()
-    if 'branch' in repo:
-      subprocess.call([ 'git', 'clone', '--quiet', '--recursive', '-b', repo['branch'], repo['repo-path'], tempdir ])
-    else:
-      subprocess.call([ 'git', 'clone', '--quiet', '--recursive', repo['repo-path'], tempdir ])
-    diff_output = subprocess.check_output([ 'git', '--git-dir=' + tempdir + '/.git', '--work-tree=' + repo['deploy-path'], 'diff' ])
-    shutil.rmtree(tempdir)
+parser = OptionParser()
+parser.add_option('-p', '--print', dest = 'print_only', help = 'Just print the results, no SNS message.', default = False, action = 'store_true')
+(options, args) = parser.parse_args()
 
-    if diff_output:
-      subject = 'WARNING : Uncommitted Changes in ' + repo['repo-path'] + ' on ' + hostname
-      send_sns('arn:aws:sns:us-east-1:344420214229:unb_lib_repo_out_of_sync_full', subject, diff_output)
-      send_sns('arn:aws:sns:us-east-1:344420214229:unb_lib_repo_out_of_sync_summary', subject, subject)
+config = json.load(open(args[0]))
+
+for host, locations in sorted(config['servers'].items()) :
+  for location in locations :
+    args = 'TMP=`mktemp -d` && cd $TMP && git clone --quiet ' + location['repo']
+    if 'branch' in location:
+      args += ' -b ' + location['branch']
+    args += ' . && sudo git --work-tree=' + location['deploy'] + ' diff && cd && rm -rf $TMP'
+
+    output = subprocess.check_output(['ssh', host, args], stderr=subprocess.STDOUT)
+
+    if output:
+      subject = 'WARNING : Uncommitted Changes in ' + location['repo'] + ' on ' + host
+      if options.print_only:
+        print subject + "\n"
+        print output
+      else:
+        send_sns(config['sns-topic-full'], subject, output)
+        send_sns(config['sns-topic-summary'], subject, subject)
