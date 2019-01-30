@@ -20,7 +20,10 @@ for host, locations in sorted(config['servers'].items()) :
     args = 'TMP=`mktemp -d` && cd $TMP && git clone --quiet ' + location['repo']
     if 'branch' in location:
       args += ' -b ' + location['branch']
-    args += ' . && sudo git --work-tree=' + location['deploy'] + ' diff && cd && rm -rf $TMP'
+    args += ' . && sudo git --work-tree=' + location['deploy'] + ' diff'
+    if 'ignore' in location:
+      args += ' -- ":." ":!' + location['ignore'] + '"'
+    args += ' && cd && rm -rf $TMP'
 
     output = subprocess.check_output(['ssh', host, args], stderr=subprocess.STDOUT)
 
