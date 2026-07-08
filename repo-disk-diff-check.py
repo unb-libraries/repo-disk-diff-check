@@ -30,8 +30,8 @@ for host, locations in sorted(config['servers'].items()) :
     if output:
       subject = 'WARNING : Uncommitted Changes in ' + location['repo'] + ' on ' + host
       if options.print_only:
-        print subject + "\n"
-        print output
+        print(subject + "\n")
+        print(output)
       else:
         send_sns(config['sns-topic-full'], subject, output)
         send_sns(config['sns-topic-summary'], subject, subject)
